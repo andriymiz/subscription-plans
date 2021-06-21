@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Interfaces\SubscriptionableInterface;
+use App\Traits\Subscriptionable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements SubscriptionableInterface
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, Subscriptionable;
 
     /**
      * The attributes that are mass assignable.
@@ -40,4 +41,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+    * Get all of the clients of the user.
+    */
+    public function clients()
+    {
+        return $this->hasMany(Client::class);
+    }
 }
